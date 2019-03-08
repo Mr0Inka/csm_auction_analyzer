@@ -65,9 +65,15 @@ function loadBets(){
     	    		float: ("f" in items[i]) ? items[i].f[0] : 0,
     	    		stickers: ("s" in items[i]) ? items[i].s[0] : false
     	    	}
-    	    	workBet(stats, allBets);
+    	    	workBet(stats);
     	    	allBets.push(stats.id);
     	    }
+
+	        for(var key in currentBets){
+	        	if(allBets.indexOf(key) == -1){
+	        		lotEnd(key);
+	        	}
+	        }
     	    
     	    setTimeout(function(){
     	    	loadBets();
@@ -84,7 +90,7 @@ function loadBets(){
     }) 
 }
 
-function workBet(item, allBets){
+function workBet(item){
 	if(item.id in currentBets){
 	  if(item.bets.length != currentBets[item.id].bets.length){
 	  console.log(colors.red("╔═══════════════════════════════════════════════════════════════════════════"))
@@ -125,12 +131,6 @@ function workBet(item, allBets){
 	  }
 	  console.log(colors.cyan("╚═══════════════════════════════════════════════════════════════════════════"))
 	}
-
-	for(var key in currentBets){
-		if(allBets.indexOf(key) == -1){
-			lotEnd(key)
-		}
-	}
 }
 
 
@@ -153,9 +153,11 @@ function lotEnd(id){
 	    console.log(colors.red("╔═══════════════════════════════════════════════════════════════════════════"));
 	    console.log(colors.red("║ Sold: " + thisItem.name))
 	    console.log(colors.red("╠═══════════════════════════════════════════════════════════════════════════"));
-	    console.log(colors.red("║ Price: " + thisItem.bets[(thisItem.bets.length - 1)].price + "$"));
-	    console.log(colors.red("║ Base: " + thisItem.base + "$"));
 	    console.log(colors.red("║ Float: " + thisItem.float));
+	    console.log(colors.red("║ Base : " + thisItem.base + "$"));
+	    for(var i = 0; i < thisItem.bets.length; i++){
+	    	console.log(colors.red("║ > Bet: " + thisItem.bets[i].price + "$"))
+	    }
 	    if(thisItem.stickers && thisItem.name.indexOf("Souvenir") == -1){
 	    console.log(colors.red("╠═══════════════════════════════════════════════════════════════════════════"))
 	    	for(var i = 0; i < thisItem.stickers.length; i++){
